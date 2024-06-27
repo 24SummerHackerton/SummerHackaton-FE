@@ -14,6 +14,8 @@ import MobileSchedule from "./mobile/mobileViews/MobileSchedule";
 import MobileEvents from "./mobile/mobileViews/MobileEvents";
 import MobileTeams from "./mobile/mobileViews/MobileTeams";
 import MobileLayout from "./mobile/MobileLayout";
+import MobileSignUp from "./mobile/MobileSignUp";
+import MobileLogin from "./mobile/MobileLogin";
 
 // 정규식을 사용하여 모바일 디바이스를 감지하는 함수
 const isMobileDevice = () => {
@@ -52,8 +54,8 @@ const App = () => {
         { path: "/teams", element: <MobileTeams /> },
       ],
     },
-    { path: "/login", element: <DesktopLogin /> },
-    { path: "/signup", element: <DesktopSignup /> },
+    { path: "/login", element: <MobileLogin /> },
+    { path: "/signup", element: <MobileSignUp /> },
   ]);
 
   return (
