@@ -45,15 +45,15 @@ const App = () => {
       path: "/",
       element: <MobileLayout />,
       children: [
-        { path: "", element: <MobileHome /> },
-        { path: "referee", element: <MobileReferee /> },
-        { path: "schedule", element: <MobileSchedule /> },
-        { path: "events", element: <MobileEvents /> },
-        { path: "teams", element: <MobileTeams /> },
+        { path: "m", element: <MobileHome /> },
+        { path: "m/referee", element: <MobileReferee /> },
+        { path: "m/schedule", element: <MobileSchedule /> },
+        { path: "m/events", element: <MobileEvents /> },
+        { path: "m/teams", element: <MobileTeams /> },
       ],
     },
-    { path: "/login", element: <DesktopLogin /> },
-    { path: "/signup", element: <DesktopSignup /> },
+    { path: "m/login", element: <DesktopLogin /> },
+    { path: "m/signup", element: <DesktopSignup /> },
   ]);
 
   return (
