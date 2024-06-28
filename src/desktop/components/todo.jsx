@@ -3,6 +3,8 @@ import ScheduleCard from "./scheduleCard";
 import { resultList, scheduleStatus } from "../../atom";
 import { useEffect } from "react";
 import ResultCard from "./resultCard";
+import { doc, getDoc } from "firebase/firestore";
+import { database } from "../../firebase";
 
 function parseDate(dateStr) {
   const [year, month, day] = dateStr
@@ -22,10 +24,34 @@ function sortedData(schedules) {
 export default function Todo() {
   const [schedules, setSchedules] = useRecoilState(scheduleStatus);
   const [results, setResults] = useRecoilState(resultList);
+  const getSchedules = async () => {
+    const docRef = doc(database, "players", "대진");
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const temp = docSnap.data();
+      setSchedules(Object.values(temp));
+      //setEvents(temp.values());
+    } else {
+      // docSnap.data() will be undefined in this case
+      console.log("No such document!");
+    }
+  };
+  const getResults = async () => {
+    const docRef = doc(database, "players", "결과");
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const temp = docSnap.data();
+      setResults(Object.values(temp));
+      //setEvents(temp.values());
+    } else {
+      // docSnap.data() will be undefined in this case
+      console.log("No such document!");
+    }
+  };
   useEffect(() => {
-    const temp = [...schedules];
-    setSchedules(sortedData(temp));
-  }, []);
+    getSchedules();
+    getResults();
+  }, [schedules, results]);
 
   return (
     <div className="flex flex-col gap-5">

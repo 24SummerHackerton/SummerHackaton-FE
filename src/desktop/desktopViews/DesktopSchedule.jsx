@@ -2,6 +2,8 @@ import { useRecoilState } from "recoil";
 import { scheduleStatus } from "../../atom";
 import { useEffect, useState } from "react";
 import GroupedScheduleCard from "../components/groupedScheduleCard";
+import { doc, getDoc } from "firebase/firestore";
+import { database } from "../../firebase";
 
 function divide(schedules) {
   let temp = schedules;
@@ -22,7 +24,19 @@ function divide(schedules) {
 export default function DesktopSchedule() {
   const [schedules, setSchedules] = useRecoilState(scheduleStatus);
   const [group, setGroup] = useState([]);
+  const getSchedule = async () => {
+    const docRef = doc(database, "players", "대진");
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const temp = docSnap.data();
+      setSchedules(Object.values(temp));
+    } else {
+      console.log("no such document!");
+    }
+  };
   useEffect(() => {
+    getSchedule();
     setGroup(divide(schedules));
   }, [schedules]);
   return (

@@ -1,42 +1,65 @@
 import React, { useState, useEffect } from "react";
-import data from "./data.json"; // JSON 파일을 불러옵니다.
+import { useRecoilState } from "recoil";
+import { eventsState } from "../../atom";
 import PartCard from "../components/partCard";
-import DesktopCreate from "./DesktopCreate"; // 적절한 경로로 수정
+import DesktopCreate from "./DesktopCreate";
+import { doc, getDoc } from "firebase/firestore";
+import { database } from "../../firebase";
 
 export default function DesktopManage() {
-  const [selectedEvent, setSelectedEvent] = useState("축구");
+  const [events, setEvents] = useRecoilState(eventsState);
+  const [selectedEvent, setSelectedEvent] = useState("");
   const [selectedTeam, setSelectedTeam] = useState("");
   const [teams, setTeams] = useState({});
   const [editingPlayer, setEditingPlayer] = useState(null);
   const [currentTeam, setCurrentTeam] = useState("선택 된 팀이 없습니다.");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newPlayer, setNewPlayer] = useState({
+    major: "",
+    studentId: "",
+    name: "",
+    phone: "",
+  });
+
+  const getPlayers = async () => {
+    const docRef = doc(database, "players", "축구");
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const temp = docSnap.data();
+      setEvents(Object.values(temp));
+    } else {
+      console.log("No such document!");
+    }
+  };
 
   useEffect(() => {
-    // 선택된 종목으로 데이터를 필터링
-    const filteredData = data.filter((item) => item[5] === selectedEvent);
+    getPlayers();
+    if (selectedEvent) {
+      const filteredData = events.filter((item) => item[4] === selectedEvent);
 
-    // 팀별로 데이터 그룹화
-    const groupedTeams = filteredData.reduce((acc, item) => {
-      const teamName = item[6];
-      if (!acc[teamName]) {
-        acc[teamName] = [];
-      }
-      acc[teamName].push({
-        major: item[0],
-        studentId: item[1],
-        name: item[2],
-        phone: item[4],
-      });
-      return acc;
-    }, {});
+      const groupedTeams = filteredData.reduce((acc, item) => {
+        const teamName = item[5];
+        if (!acc[teamName]) {
+          acc[teamName] = [];
+        }
+        acc[teamName].push({
+          major: item[0],
+          studentId: item[1],
+          name: item[2],
+          phone: item[3],
+        });
+        return acc;
+      }, {});
 
-    setTeams(groupedTeams);
-    setSelectedTeam(""); // 팀 선택 초기화
+      setTeams(groupedTeams);
+      setSelectedTeam("");
+    }
   }, [selectedEvent]);
 
   const handleTeamClick = (team) => {
     setSelectedTeam(team);
-    setEditingPlayer(null); // 선수 수정 모드 초기화
+    setEditingPlayer(null);
   };
 
   const handleEditPlayer = (index) => {
@@ -67,8 +90,42 @@ export default function DesktopManage() {
   };
 
   const handleSendLink = () => {
-    // 링크 전송 로직 구현
     alert("선수 추가 링크가 전송되었습니다.");
+  };
+
+  const handleDeleteEvent = (eventName) => {
+    setEvents((prevEvents) =>
+      prevEvents.filter((event) => event[4] !== eventName)
+    );
+    if (selectedEvent === eventName) {
+      setSelectedEvent("");
+      setTeams({});
+    }
+  };
+
+  const handleAddNewPlayer = () => {
+    setTeams((prevTeams) => {
+      const updatedTeams = { ...prevTeams };
+      if (!updatedTeams[selectedTeam]) {
+        updatedTeams[selectedTeam] = [];
+      }
+      updatedTeams[selectedTeam].push(newPlayer);
+      return updatedTeams;
+    });
+    setNewPlayer({
+      major: "",
+      studentId: "",
+      name: "",
+      phone: "",
+    });
+  };
+
+  const handleNewPlayerInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewPlayer((prevPlayer) => ({
+      ...prevPlayer,
+      [name]: value,
+    }));
   };
 
   const renderTeamList = () => (
@@ -98,24 +155,19 @@ export default function DesktopManage() {
     const selectedTeamData = teams[selectedTeam];
 
     return (
-      <div className="team-details mt-4">
+      <div className="team-details">
         <div className="text-2xl font-bold">
           현재 표시된 팀은 {currentTeam} 입니다.
         </div>
-        <button
-          onClick={handleSendLink}
-          className="bg-pointRed text-white p-2 rounded mt-4"
-        >
-          선수 추가 링크 전송
-        </button>
-        <table className="min-w-full bg-white mt-4 table-fixed">
+
+        <table className="min-w-full bg-white mt-4 table-fixed text-sm">
           <thead>
             <tr>
               <th className="py-2 w-1/12">번호</th>
               <th className="py-2 w-2/12">이름</th>
               <th className="py-2 w-2/12">학번</th>
-              <th className="py-2 w-2/12">학과</th>
-              <th className="py-2 w-3/12">전화번호</th>
+              <th className="py-2 w-3/12">학과</th>
+              <th className="py-2 w-2/12">전화번호</th>
               <th className="py-2 w-1/12">수정</th>
               <th className="py-2 w-1/12">삭제</th>
             </tr>
@@ -192,52 +244,90 @@ export default function DesktopManage() {
             ))}
           </tbody>
         </table>
+        <div className="mt-4">
+          <h3 className="text-xl font-bold">새로운 선수 추가</h3>
+          <div className="flex flex-col gap-2">
+            <input
+              type="text"
+              name="major"
+              placeholder="학과"
+              value={newPlayer.major}
+              onChange={handleNewPlayerInputChange}
+              className="p-2 border rounded"
+            />
+            <input
+              type="text"
+              name="studentId"
+              placeholder="학번"
+              value={newPlayer.studentId}
+              onChange={handleNewPlayerInputChange}
+              className="p-2 border rounded"
+            />
+            <input
+              type="text"
+              name="name"
+              placeholder="이름"
+              value={newPlayer.name}
+              onChange={handleNewPlayerInputChange}
+              className="p-2 border rounded"
+            />
+            <input
+              type="text"
+              name="phone"
+              placeholder="전화번호"
+              value={newPlayer.phone}
+              onChange={handleNewPlayerInputChange}
+              className="p-2 border rounded"
+            />
+            <button
+              onClick={handleAddNewPlayer}
+              className="bg-pointRed text-white p-2 rounded mt-2"
+            >
+              선수 추가
+            </button>
+          </div>
+        </div>
       </div>
     );
   };
 
-  useEffect(() => {
-    // 페이지 로드 시 가장 위에 있는 종목을 선택
-    setSelectedEvent("축구");
-  }, []);
+  const handleAddEvent = (newEvent) => {
+    setEvents((prevEvents) => [
+      ...prevEvents,
+      ["학과명", 0, "이름", 0, "전화번호", newEvent.eventName, "팀명"],
+    ]);
+  };
 
   return (
-    <div className="flex">
-      <div className="p-4 border-r-2 sticky top-0 w-[500px]">
-        <div className="text-3xl font-bold mb-4">종목 관리</div>
-        <div className="flex flex-col gap-4">
+    <div className="flex justify-start w-full">
+      <div className="p-4 w-[500px] h-[100vh]">
+        <div className="text-3xl font-bold mb-4 ">종목 관리</div>
+        <div className="flex flex-col gap-4 h-[80%] overflow-y-scroll">
           <PartCard
             manageText="종목 상세보기"
-            onClick={() => setSelectedEvent("축구")}
-          />
-          <PartCard
-            manageText="종목 상세보기"
-            onClick={() => setSelectedEvent("야구")}
-          />
-          <PartCard
-            manageText="종목 상세보기"
-            onClick={() => setSelectedEvent("피구")}
-          />
-          <PartCard
-            manageText="종목 상세보기"
-            onClick={() => setSelectedEvent("계주")}
+            onClick={(eventName) => setSelectedEvent(eventName)}
+            onDelete={handleDeleteEvent}
           />
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="bg-black text-white p-2 rounded mt-4"
+          className="bg-black text-white p-2 rounded mt-1"
         >
           종목 추가
         </button>
       </div>
       <div className="w-[800px] p-4">
-        {selectedEvent && (
+        {selectedEvent ? (
           <>
             <div className="text-3xl font-bold mb-4">팀 관리</div>
             <div className="text-[35px] font-bold mb-4">{selectedEvent}</div>
             {renderTeamList()}
             {renderSelectedTeam()}
           </>
+        ) : (
+          <div className="text-2xl font-bold mb-4">
+            보고 싶은 종목을 클릭하세요.
+          </div>
         )}
       </div>
       {isModalOpen && (
@@ -246,7 +336,12 @@ export default function DesktopManage() {
             className="fixed inset-0 bg-black opacity-50"
             onClick={() => setIsModalOpen(false)}
           ></div>
-          <DesktopCreate onClose={() => setIsModalOpen(false)} />
+          <div className="bg-white p-6 rounded-lg max-w-lg mx-auto">
+            <DesktopCreate
+              onClose={() => setIsModalOpen(false)}
+              onSubmit={handleAddEvent}
+            />
+          </div>
         </div>
       )}
     </div>

@@ -19,8 +19,15 @@ export default function GroupedScheduleCard({ group, type }) {
         </div>
       </div>
       <div className="flex flex-col gap-5">
-        {group.map((g) => {
-          return <ScheduleModify g={g} isDone={isDone} setIsDone={setIsDone} />;
+        {group.map((g, i) => {
+          return (
+            <ScheduleModify
+              key={i}
+              g={g}
+              isDone={isDone}
+              setIsDone={setIsDone}
+            />
+          );
         })}
       </div>
     </div>
