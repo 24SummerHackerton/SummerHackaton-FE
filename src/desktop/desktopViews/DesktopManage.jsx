@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
 import Tournament from "../components/tournament";
-import data from "./data.json";  // JSON 파일을 불러옵니다.
+import data from "./data.json"; // JSON 파일을 불러옵니다.
 
 export default function DesktopManage() {
   const [selectedEvent, setSelectedEvent] = useState("");
   const [selectedTeam, setSelectedTeam] = useState("");
   const [teams, setTeams] = useState({});
   const [editingPlayer, setEditingPlayer] = useState(null);
+  const [currentTeam, setCurrentTeam] = useState("선택 된 팀이 없습니다.");
 
   useEffect(() => {
     if (selectedEvent) {
       // 선택된 종목으로 데이터를 필터링
-      const filteredData = data.filter(item => item[5] === selectedEvent);
+      const filteredData = data.filter((item) => item[5] === selectedEvent);
 
       // 팀별로 데이터 그룹화
       const groupedTeams = filteredData.reduce((acc, item) => {
@@ -23,13 +24,13 @@ export default function DesktopManage() {
           major: item[0],
           studentId: item[1],
           name: item[2],
-          phone: item[4]
+          phone: item[4],
         });
         return acc;
       }, {});
 
       setTeams(groupedTeams);
-      setSelectedTeam("");  // 팀 선택 초기화
+      setSelectedTeam(""); // 팀 선택 초기화
     }
   }, [selectedEvent]);
 
@@ -53,16 +54,18 @@ export default function DesktopManage() {
   };
 
   const handleDeletePlayer = (index) => {
-    setTeams(prevTeams => {
+    setTeams((prevTeams) => {
       const updatedTeams = { ...prevTeams };
-      updatedTeams[selectedTeam] = updatedTeams[selectedTeam].filter((_, i) => i !== index);
+      updatedTeams[selectedTeam] = updatedTeams[selectedTeam].filter(
+        (_, i) => i !== index
+      );
       return updatedTeams;
     });
   };
 
   const handleInputChange = (e, field, index) => {
     const { value } = e.target;
-    setTeams(prevTeams => {
+    setTeams((prevTeams) => {
       const updatedTeams = { ...prevTeams };
       updatedTeams[selectedTeam][index][field] = value;
       return updatedTeams;
@@ -75,14 +78,17 @@ export default function DesktopManage() {
   };
 
   const renderTeamList = () => (
-    <div className="team-list text-center">
+    <div className="team-list text-center flex ">
       {Object.keys(teams).map((team, index) => (
         <div
           key={index}
-          className="text-xl cursor-pointer m-2 border-2 rounded-xl border-pointRed"
-          onClick={() => handleTeamClick(team)}
+          className="text-xl cursor-pointer m-2 border-2 rounded-xl border-pointRed px-5"
+          onClick={() => {
+            handleTeamClick(team);
+            setCurrentTeam(team);
+          }}
         >
-          팀 {team}
+          {team}
         </div>
       ))}
     </div>
@@ -90,14 +96,24 @@ export default function DesktopManage() {
 
   const renderSelectedTeam = () => {
     if (selectedTeam === "") {
-      return <div>팀 정보를 보고 싶으면 팀 이름을 클릭하세요.</div>;
+      return (
+        <div className="text-center">
+          팀 정보를 보고 싶으면 팀 이름을 클릭하세요.
+        </div>
+      );
     }
 
     const selectedTeamData = teams[selectedTeam];
 
     return (
       <div className="team-details">
-        <button onClick={handleSendLink} className="bg-blue-500 text-white p-2 rounded mt-4">
+        <div className="text-2xl">
+          현재 표시된 팀은 <strong>{currentTeam}</strong> 입니다.
+        </div>
+        <button
+          onClick={handleSendLink}
+          className="bg-pointRed text-white p-2 rounded mt-4"
+        >
           선수 추가 링크 전송
         </button>
         <table className="min-w-full bg-white">
@@ -121,7 +137,7 @@ export default function DesktopManage() {
                     <input
                       type="text"
                       value={participant.name}
-                      onChange={(e) => handleInputChange(e, 'name', index)}
+                      onChange={(e) => handleInputChange(e, "name", index)}
                     />
                   ) : (
                     participant.name
@@ -132,7 +148,7 @@ export default function DesktopManage() {
                     <input
                       type="text"
                       value={participant.studentId}
-                      onChange={(e) => handleInputChange(e, 'studentId', index)}
+                      onChange={(e) => handleInputChange(e, "studentId", index)}
                     />
                   ) : (
                     participant.studentId
@@ -143,7 +159,7 @@ export default function DesktopManage() {
                     <input
                       type="text"
                       value={participant.major}
-                      onChange={(e) => handleInputChange(e, 'major', index)}
+                      onChange={(e) => handleInputChange(e, "major", index)}
                     />
                   ) : (
                     participant.major
@@ -154,7 +170,7 @@ export default function DesktopManage() {
                     <input
                       type="text"
                       value={participant.phone}
-                      onChange={(e) => handleInputChange(e, 'phone', index)}
+                      onChange={(e) => handleInputChange(e, "phone", index)}
                     />
                   ) : (
                     participant.phone
@@ -162,13 +178,19 @@ export default function DesktopManage() {
                 </td>
                 <td className="border px-4 py-2">
                   {editingPlayer === index ? (
-                    <button onClick={() => handleSavePlayer(index)}>저장</button>
+                    <button onClick={() => handleSavePlayer(index)}>
+                      저장
+                    </button>
                   ) : (
-                    <button onClick={() => handleEditPlayer(index)}>수정</button>
+                    <button onClick={() => handleEditPlayer(index)}>
+                      수정
+                    </button>
                   )}
                 </td>
                 <td className="border px-4 py-2">
-                  <button onClick={() => handleDeletePlayer(index)}>삭제</button>
+                  <button onClick={() => handleDeletePlayer(index)}>
+                    삭제
+                  </button>
                 </td>
               </tr>
             ))}
@@ -179,8 +201,8 @@ export default function DesktopManage() {
   };
 
   return (
-    <div className="flex">
-      <div className="w-1/4 p-4 border-r-2">
+    <div className="flex flex-col w-full justify-center items-center">
+      <div className="p-4">
         {!selectedEvent ? (
           <div>
             <h2>종목을 선택하세요</h2>
@@ -192,22 +214,28 @@ export default function DesktopManage() {
                 required
                 className="border rounded p-2"
               />
-              <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+              <button
+                type="submit"
+                className="bg-blue-500 text-white p-2 rounded"
+              >
                 확인
               </button>
             </form>
           </div>
         ) : (
           <div>
-            <div>종목: {selectedEvent}</div>
+            <div className="text-[35px] font-bold">{selectedEvent}</div>
             {renderTeamList()}
           </div>
         )}
       </div>
       <div className="w-3/4 p-4">
-        {selectedEvent ? renderSelectedTeam() : <div>종목을 먼저 선택하세요.</div>}
+        {selectedEvent ? (
+          renderSelectedTeam()
+        ) : (
+          <div className="">종목을 먼저 선택하세요.</div>
+        )}
       </div>
-      <Tournament />
     </div>
   );
 }
