@@ -42,7 +42,6 @@ const App = () => {
         { path: "results", element: <DesktopResults /> },
         { path: "manage", element: <DesktopManage /> },
         { path: "tournament", element: <DesktopTournament /> },
-        { path: "teams", element: <DesktopTeams /> },
       ],
     },
     { path: "/login", element: <DesktopLogin /> },
