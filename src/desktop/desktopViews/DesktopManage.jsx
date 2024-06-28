@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
-import data from "./data.json"; // JSON 파일을 불러옵니다.
-import PartCard from "../components/partCard";
-import DesktopCreate from "./DesktopCreate"; // 적절한 경로로 수정
+import React, { useState, useEffect } from 'react';
+import { useRecoilState } from 'recoil';
+import { eventsState } from '../../atom';
+import PartCard from '../components/partCard';
+import DesktopCreate from './DesktopCreate';
 
 export default function DesktopManage() {
-  const [selectedEvent, setSelectedEvent] = useState("축구");
+  const [events, setEvents] = useRecoilState(eventsState);
+  const [selectedEvent, setSelectedEvent] = useState("");
   const [selectedTeam, setSelectedTeam] = useState("");
   const [teams, setTeams] = useState({});
   const [editingPlayer, setEditingPlayer] = useState(null);
@@ -12,31 +14,31 @@ export default function DesktopManage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    // 선택된 종목으로 데이터를 필터링
-    const filteredData = data.filter((item) => item[5] === selectedEvent);
+    if (selectedEvent) {
+      const filteredData = events.filter((item) => item[5] === selectedEvent);
 
-    // 팀별로 데이터 그룹화
-    const groupedTeams = filteredData.reduce((acc, item) => {
-      const teamName = item[6];
-      if (!acc[teamName]) {
-        acc[teamName] = [];
-      }
-      acc[teamName].push({
-        major: item[0],
-        studentId: item[1],
-        name: item[2],
-        phone: item[4],
-      });
-      return acc;
-    }, {});
+      const groupedTeams = filteredData.reduce((acc, item) => {
+        const teamName = item[6];
+        if (!acc[teamName]) {
+          acc[teamName] = [];
+        }
+        acc[teamName].push({
+          major: item[0],
+          studentId: item[1],
+          name: item[2],
+          phone: item[4],
+        });
+        return acc;
+      }, {});
 
-    setTeams(groupedTeams);
-    setSelectedTeam(""); // 팀 선택 초기화
-  }, [selectedEvent]);
+      setTeams(groupedTeams);
+      setSelectedTeam(""); 
+    }
+  }, [selectedEvent, events]);
 
   const handleTeamClick = (team) => {
     setSelectedTeam(team);
-    setEditingPlayer(null); // 선수 수정 모드 초기화
+    setEditingPlayer(null);
   };
 
   const handleEditPlayer = (index) => {
@@ -67,8 +69,15 @@ export default function DesktopManage() {
   };
 
   const handleSendLink = () => {
-    // 링크 전송 로직 구현
     alert("선수 추가 링크가 전송되었습니다.");
+  };
+
+  const handleDeleteEvent = (eventName) => {
+    setEvents((prevEvents) => prevEvents.filter(event => event[5] !== eventName));
+    if (selectedEvent === eventName) {
+      setSelectedEvent("");
+      setTeams({});
+    }
   };
 
   const renderTeamList = () => (
@@ -108,14 +117,14 @@ export default function DesktopManage() {
         >
           선수 추가 링크 전송
         </button>
-        <table className="min-w-full bg-white mt-4 table-fixed">
+        <table className="min-w-full bg-white mt-4 table-fixed text-sm">
           <thead>
             <tr>
               <th className="py-2 w-1/12">번호</th>
               <th className="py-2 w-2/12">이름</th>
               <th className="py-2 w-2/12">학번</th>
-              <th className="py-2 w-2/12">학과</th>
-              <th className="py-2 w-3/12">전화번호</th>
+              <th className="py-2 w-3/12">학과</th>
+              <th className="py-2 w-2/12">전화번호</th>
               <th className="py-2 w-1/12">수정</th>
               <th className="py-2 w-1/12">삭제</th>
             </tr>
@@ -196,10 +205,12 @@ export default function DesktopManage() {
     );
   };
 
-  useEffect(() => {
-    // 페이지 로드 시 가장 위에 있는 종목을 선택
-    setSelectedEvent("축구");
-  }, []);
+  const handleAddEvent = (newEvent) => {
+    setEvents((prevEvents) => [
+      ...prevEvents,
+      ["학과명", "학번", "이름", 0, "전화번호", newEvent.eventName, "팀명"],
+    ]);
+  };
 
   return (
     <div className="flex">
@@ -208,37 +219,32 @@ export default function DesktopManage() {
         <div className="flex flex-col gap-4">
           <PartCard
             manageText="종목 상세보기"
-            onClick={() => setSelectedEvent("축구")}
-          />
-          <PartCard
-            manageText="종목 상세보기"
-            onClick={() => setSelectedEvent("야구")}
-          />
-          <PartCard
-            manageText="종목 상세보기"
-            onClick={() => setSelectedEvent("피구")}
-          />
-          <PartCard
-            manageText="종목 상세보기"
-            onClick={() => setSelectedEvent("계주")}
+            onClick={(eventName) => setSelectedEvent(eventName)}
+            onDelete={handleDeleteEvent}
           />
         </div>
         <button onClick={() => setIsModalOpen(true)} className="bg-black text-white p-2 rounded mt-4">종목 추가</button>
       </div>
       <div className="w-[800px] p-4">
-        {selectedEvent && (
+        {selectedEvent ? (
           <>
             <div className="text-3xl font-bold mb-4">팀 관리</div>
             <div className="text-[35px] font-bold mb-4">{selectedEvent}</div>
             {renderTeamList()}
             {renderSelectedTeam()}
           </>
+        ) : (
+          <div className="text-2xl font-bold mb-4">
+            보고 싶은 종목을 클릭하세요.
+          </div>
         )}
       </div>
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <div className="fixed inset-0 bg-black opacity-50" onClick={() => setIsModalOpen(false)}></div>
-          <DesktopCreate onClose={() => setIsModalOpen(false)} />
+          <div className="bg-white p-6 rounded-lg max-w-lg mx-auto">
+            <DesktopCreate onClose={() => setIsModalOpen(false)} onSubmit={handleAddEvent} />
+          </div>
         </div>
       )}
     </div>

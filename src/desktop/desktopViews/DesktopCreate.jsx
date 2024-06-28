@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export default function DesktopCreate({ onClose }) {
+export default function DesktopCreate({ onClose, onSubmit }) {
   const [formData, setFormData] = useState({
     eventName: '',
     participants: '',
@@ -40,8 +40,8 @@ export default function DesktopCreate({ onClose }) {
     }
 
     if (valid) {
-      alert('Form submitted successfully!');
-      // Add your form submission logic here
+      onSubmit({ ...formData, teams: [] }); // Ensure teams is included
+      onClose();
     }
   };
 
