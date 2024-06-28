@@ -40,7 +40,7 @@ export default function Navigation() {
       </div>
       <div
         className="flex gap-3 justify-start items-center cursor-pointer hover:bg-gray-200 py-5 px-10"
-        onClick={() => navigate("/")}
+        onClick={() => navigate("/create")}
       >
         <FaClipboardList className="text-[35px]" />
         <span className="text-[20px]">종목 개설</span>
