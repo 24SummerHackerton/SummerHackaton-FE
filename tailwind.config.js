@@ -5,6 +5,7 @@ export default {
     extend: {
       colors: {
         pointRed: "#ff3334",
+        lightRed: "#fb7777",
       },
     },
   },

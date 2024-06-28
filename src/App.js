@@ -6,7 +6,7 @@ import DesktopReferee from "./desktop/desktopViews/DesktopReferee";
 import DesktopHome from "./desktop/desktopViews/DesktopHome";
 import DesktopSchedule from "./desktop/desktopViews/DesktopSchedule";
 import DesktopCreate from "./desktop/desktopViews/DesktopCreate";
-import DesktopTeams from "./desktop/desktopViews/DesktopTeams";
+import DesktopTeams from "./desktop/desktopViews/DesktopResults";
 import DesktopSignup from "./desktop/DesktopSignup";
 import DesktopLogin from "./desktop/DesktopLogin";
 import DesktopManage from "./desktop/desktopViews/DesktopManage";
@@ -18,6 +18,8 @@ import MobileTeams from "./mobile/mobileViews/MobileTeams";
 import MobileLayout from "./mobile/MobileLayout";
 import MobileSignUp from "./mobile/MobileSignup";
 import MobileLogin from "./mobile/MobileLogin";
+import DesktopResults from "./desktop/desktopViews/DesktopResults";
+import DesktopTournament from "./desktop/desktopViews/DesktopTournament";
 
 // 정규식을 사용하여 모바일 디바이스를 감지하는 함수
 const isMobileDevice = () => {
@@ -37,8 +39,10 @@ const App = () => {
         { path: "referee", element: <DesktopReferee /> },
         { path: "schedule", element: <DesktopSchedule /> },
         { path: "create", element: <DesktopCreate /> },
-        { path: "teams", element: <DesktopTeams /> },
+        { path: "results", element: <DesktopResults /> },
         { path: "manage", element: <DesktopManage /> },
+        { path: "tournament", element: <DesktopTournament /> },
+        { path: "teams", element: <DesktopTeams /> },
       ],
     },
     { path: "/login", element: <DesktopLogin /> },
