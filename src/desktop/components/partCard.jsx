@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 export default function PartCard() {
   const navigate = useNavigate();
   return (
-    <div className="border-2 border-black rounded-md w-[500px] px-3 py-2">
+    <div className="border-2 border-black rounded-md w-[400px] px-3 py-2">
       <div className="flex justify-between">
         <div className="">
           <div className="font-bold text-2xl">종목 이름</div>
