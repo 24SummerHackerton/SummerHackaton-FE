@@ -1,3 +1,13 @@
+import PartCard from "../../components/partCard";
+
 export default function DesktopHome() {
-  return <div>Desktop Home</div>;
+  return (
+    <div>
+      <PartCard />
+      <PartCard />
+      <PartCard />
+      <PartCard />
+      <PartCard />
+    </div>
+  );
 }
