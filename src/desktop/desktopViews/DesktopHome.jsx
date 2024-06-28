@@ -5,6 +5,7 @@ import { GiSoccerField } from "react-icons/gi";
 import { MdSportsFootball } from "react-icons/md";
 import { FaBaseballBatBall } from "react-icons/fa6";
 import ScheduleCard from "../components/scheduleCard";
+import Todo from "../components/todo";
 
 export default function DesktopHome() {
   return (
@@ -21,7 +22,7 @@ export default function DesktopHome() {
         </div>
       </div>
 
-      <div className="flex gap-5">
+      <div className="flex gap-5 justify-center ">
         <div className="flex flex-col gap-5 relative z-10 px-10 py-5">
           <div className="text-2xl font-bold">현재 개설된 종목</div>
           <PartCard />
@@ -34,7 +35,7 @@ export default function DesktopHome() {
         <div className="flex flex-col gap-5 relative z-10 px-10 py-5">
           <div className="text-2xl font-bold">경기 일정</div>
           <div className="">
-            <ScheduleCard />
+            <Todo />
           </div>
         </div>
       </div>
