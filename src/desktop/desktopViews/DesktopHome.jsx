@@ -1,4 +1,4 @@
-import PartCard from "../../components/partCard";
+import PartCard from "../components/partCard";
 
 export default function DesktopHome() {
   return (
