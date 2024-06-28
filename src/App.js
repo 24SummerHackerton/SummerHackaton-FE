@@ -1,4 +1,5 @@
 import React from "react";
+import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import DesktopLayout from "./desktop/DesktopLayout";
 import DesktopReferee from "./desktop/desktopViews/DesktopReferee";
@@ -37,7 +38,7 @@ const App = () => {
         { path: "schedule", element: <DesktopSchedule /> },
         { path: "create", element: <DesktopCreate /> },
         { path: "teams", element: <DesktopTeams /> },
-        { path: "manage", element: <DesktopManage />}
+        { path: "manage", element: <DesktopManage /> },
       ],
     },
     { path: "/login", element: <DesktopLogin /> },
