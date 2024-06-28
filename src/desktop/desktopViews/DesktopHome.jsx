@@ -1,13 +1,15 @@
+import React from 'react';
 import PartCard from "../components/partCard";
 import { PiSoccerBallFill } from "react-icons/pi";
 import { PiBaseballHelmetFill } from "react-icons/pi";
 import { GiSoccerField } from "react-icons/gi";
 import { MdSportsFootball } from "react-icons/md";
 import { FaBaseballBatBall } from "react-icons/fa6";
-import ScheduleCard from "../components/scheduleCard";
+import { useNavigate } from "react-router-dom";
 import Todo from "../components/todo";
 
 export default function DesktopHome() {
+  const navigate = useNavigate();
   return (
     <div className="w-full">
       <div className="bg-pointRed text-white w-full px-52 h-[40vh] flex flex-col justify-center items-center overflow-hidden">
@@ -25,11 +27,7 @@ export default function DesktopHome() {
       <div className="flex gap-5 justify-center ">
         <div className="flex flex-col gap-5 relative z-10 px-10 py-5">
           <div className="text-2xl font-bold">현재 개설된 종목</div>
-          <PartCard manageText="관리"/>
-          <PartCard manageText="관리"/>
-          <PartCard manageText="관리"/>
-          <PartCard manageText="관리"/>
-          <PartCard manageText="관리"/>
+          <PartCard manageText="관리" onClick={() => navigate("/manage")}/>
         </div>
 
         <div className="flex flex-col gap-5 relative z-10 px-10 py-5">
