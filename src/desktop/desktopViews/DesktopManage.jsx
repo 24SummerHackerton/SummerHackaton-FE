@@ -6,6 +6,7 @@ export default function DesktopManage() {
   const [selectedEvent, setSelectedEvent] = useState("");
   const [selectedTeam, setSelectedTeam] = useState("");
   const [teams, setTeams] = useState({});
+  const [editingPlayer, setEditingPlayer] = useState(null);
 
   useEffect(() => {
     if (selectedEvent) {
@@ -33,17 +34,44 @@ export default function DesktopManage() {
   }, [selectedEvent]);
 
   const handleTeamClick = (team) => {
-    if (selectedTeam === team) {
-      setSelectedTeam("");
-    } else {
-      setSelectedTeam(team);
-    }
+    setSelectedTeam(team);
+    setEditingPlayer(null); // 선수 수정 모드 초기화
   };
 
   const handleEventSubmit = (event) => {
     event.preventDefault();
     const eventValue = event.target.elements.event.value;
     setSelectedEvent(eventValue);
+  };
+
+  const handleEditPlayer = (index) => {
+    setEditingPlayer(index);
+  };
+
+  const handleSavePlayer = (index) => {
+    setEditingPlayer(null);
+  };
+
+  const handleDeletePlayer = (index) => {
+    setTeams(prevTeams => {
+      const updatedTeams = { ...prevTeams };
+      updatedTeams[selectedTeam] = updatedTeams[selectedTeam].filter((_, i) => i !== index);
+      return updatedTeams;
+    });
+  };
+
+  const handleInputChange = (e, field, index) => {
+    const { value } = e.target;
+    setTeams(prevTeams => {
+      const updatedTeams = { ...prevTeams };
+      updatedTeams[selectedTeam][index][field] = value;
+      return updatedTeams;
+    });
+  };
+
+  const handleSendLink = () => {
+    // 링크 전송 로직 구현
+    alert("선수 추가 링크가 전송되었습니다.");
   };
 
   const renderTeamList = () => (
@@ -69,6 +97,9 @@ export default function DesktopManage() {
 
     return (
       <div className="team-details">
+        <button onClick={handleSendLink} className="bg-blue-500 text-white p-2 rounded mt-4">
+          선수 추가 링크 전송
+        </button>
         <table className="min-w-full bg-white">
           <thead>
             <tr>
@@ -77,16 +108,68 @@ export default function DesktopManage() {
               <th className="py-2">학번</th>
               <th className="py-2">학과</th>
               <th className="py-2">전화번호</th>
+              <th className="py-2">수정</th>
+              <th className="py-2">삭제</th>
             </tr>
           </thead>
           <tbody>
             {selectedTeamData.map((participant, index) => (
               <tr key={index}>
                 <td className="border px-4 py-2">{index + 1}</td>
-                <td className="border px-4 py-2">{participant.name}</td>
-                <td className="border px-4 py-2">{participant.studentId}</td>
-                <td className="border px-4 py-2">{participant.major}</td>
-                <td className="border px-4 py-2">{participant.phone}</td>
+                <td className="border px-4 py-2">
+                  {editingPlayer === index ? (
+                    <input
+                      type="text"
+                      value={participant.name}
+                      onChange={(e) => handleInputChange(e, 'name', index)}
+                    />
+                  ) : (
+                    participant.name
+                  )}
+                </td>
+                <td className="border px-4 py-2">
+                  {editingPlayer === index ? (
+                    <input
+                      type="text"
+                      value={participant.studentId}
+                      onChange={(e) => handleInputChange(e, 'studentId', index)}
+                    />
+                  ) : (
+                    participant.studentId
+                  )}
+                </td>
+                <td className="border px-4 py-2">
+                  {editingPlayer === index ? (
+                    <input
+                      type="text"
+                      value={participant.major}
+                      onChange={(e) => handleInputChange(e, 'major', index)}
+                    />
+                  ) : (
+                    participant.major
+                  )}
+                </td>
+                <td className="border px-4 py-2">
+                  {editingPlayer === index ? (
+                    <input
+                      type="text"
+                      value={participant.phone}
+                      onChange={(e) => handleInputChange(e, 'phone', index)}
+                    />
+                  ) : (
+                    participant.phone
+                  )}
+                </td>
+                <td className="border px-4 py-2">
+                  {editingPlayer === index ? (
+                    <button onClick={() => handleSavePlayer(index)}>저장</button>
+                  ) : (
+                    <button onClick={() => handleEditPlayer(index)}>수정</button>
+                  )}
+                </td>
+                <td className="border px-4 py-2">
+                  <button onClick={() => handleDeletePlayer(index)}>삭제</button>
+                </td>
               </tr>
             ))}
           </tbody>
