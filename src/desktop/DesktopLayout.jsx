@@ -10,7 +10,7 @@ export default function DesktopLayout() {
         <Navigation />
         <LoginStatus />
       </div>
-      <div className="flex justify-center items-center pl-[300px]">
+      <div className="flex justify-center items-center pl-[300px] w-full">
         <Outlet />
       </div>
     </div>
