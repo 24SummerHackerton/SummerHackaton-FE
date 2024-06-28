@@ -208,7 +208,7 @@ export default function DesktopManage() {
   const handleAddEvent = (newEvent) => {
     setEvents((prevEvents) => [
       ...prevEvents,
-      ["학과명", "학번", "이름", 0, "전화번호", newEvent.eventName, "팀명"],
+      ["학과명",  0, "이름", 0, "전화번호", newEvent.eventName, "팀명"],
     ]);
   };
 
