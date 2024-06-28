@@ -8,6 +8,7 @@ import DesktopCreate from "./desktop/desktopViews/DesktopCreate";
 import DesktopTeams from "./desktop/desktopViews/DesktopTeams";
 import DesktopSignup from "./desktop/DesktopSignup";
 import DesktopLogin from "./desktop/DesktopLogin";
+import DesktopManage from "./desktop/desktopViews/DesktopManage";
 import MobileHome from "./mobile/mobileViews/MobileHome";
 import MobileReferee from "./mobile/mobileViews/MobileReferee";
 import MobileSchedule from "./mobile/mobileViews/MobileSchedule";
@@ -34,9 +35,9 @@ const App = () => {
         { path: "", element: <DesktopHome /> },
         { path: "referee", element: <DesktopReferee /> },
         { path: "schedule", element: <DesktopSchedule /> },
-
         { path: "create", element: <DesktopCreate /> },
         { path: "teams", element: <DesktopTeams /> },
+        { path: "manage", element: <DesktopManage />}
       ],
     },
     { path: "/login", element: <DesktopLogin /> },
