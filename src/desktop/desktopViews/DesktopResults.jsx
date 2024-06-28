@@ -1,3 +1,3 @@
 export default function DesktopResults() {
-  return <div>Desktop teams</div>;
+  return <div>Desktop results</div>;
 }
