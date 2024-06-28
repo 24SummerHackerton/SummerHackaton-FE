@@ -33,7 +33,6 @@ export default function DesktopHome() {
         </div>
 
         <div className="flex flex-col gap-5 relative z-10 px-10 py-5">
-          <div className="text-2xl font-bold">경기 일정</div>
           <div className="">
             <Todo />
           </div>
