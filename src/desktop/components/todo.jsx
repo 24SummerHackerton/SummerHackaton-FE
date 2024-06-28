@@ -1,19 +1,9 @@
+import { useRecoilState, useRecoilValue } from "recoil";
 import ScheduleCard from "./scheduleCard";
+import { resultList, scheduleStatus } from "../../atom";
+import { useEffect } from "react";
+import ResultCard from "./resultCard";
 
-const schedules = [
-  ["축구", "결승전", "컴퓨터공학과", "이탈리아어통번역학과", "24.07.30(화)"],
-  ["농구", "결승전", "데이터융합학부", "반도체공학과", "24.07.30(화)"],
-  ["피구", "4강", "통계학과", "컴퓨터공학과", "24.07.29(화)"],
-  ["축구", "4강", "컴퓨터공학과", "스페인통번역학과", "24.07.28(화)"],
-  ["계주", "8강", "컴퓨터공학과", "바이오메디컬공학과", "24.07.26(화)"],
-  [
-    "줄다리기",
-    "결승전",
-    "컴퓨터공학과",
-    "이탈리아어통번역학과",
-    "24.07.15(화)",
-  ],
-];
 function parseDate(dateStr) {
   const [year, month, day] = dateStr
     .split(/[.()]/)
@@ -24,17 +14,33 @@ function parseDate(dateStr) {
   return new Date(parsedYear, parsedMonth, parsedDay);
 }
 
+function sortedData(schedules) {
+  const schedulesCopy = [...schedules]; // 데이터를 복사하여 원본 배열을 수정하지 않음
+  return schedulesCopy.sort((a, b) => parseDate(a[4]) - parseDate(b[4]));
+}
+
 export default function Todo() {
-  // 데이터 정렬
-  const sortedData = schedules.sort(
-    (a, b) => parseDate(a[4]) - parseDate(b[4])
-  );
+  const [schedules, setSchedules] = useRecoilState(scheduleStatus);
+  const [results, setResults] = useRecoilState(resultList);
+  useEffect(() => {
+    const temp = [...schedules];
+    setSchedules(sortedData(temp));
+  }, []);
+
   return (
-    <div>
-      {sortedData.map((schedule, i) => {
-        console.log(schedule);
-        return <ScheduleCard key={i} schedule={schedule} />;
-      })}
+    <div className="flex flex-col gap-5">
+      <div>
+        <div className="text-2xl font-bold">경기 일정</div>
+        {schedules.map((schedule, i) => (
+          <ScheduleCard key={i} schedule={schedule} />
+        ))}
+      </div>
+      <div>
+        <div className="text-2xl font-bold">완료된 경기</div>
+        {results.map((res, i) => {
+          return <ResultCard key={i} res={res} />;
+        })}
+      </div>
     </div>
   );
 }

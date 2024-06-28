@@ -2,6 +2,8 @@ import { PiSoccerBallFill } from "react-icons/pi";
 import { MdSportsBasketball } from "react-icons/md";
 import { MdOutlineSportsVolleyball } from "react-icons/md";
 import { GrRun } from "react-icons/gr";
+import RunningResult from "./typeResult-running";
+import ElseResult from "./typeResult-else";
 
 function selectIcon(sport) {
   if (sport === "축구") {
@@ -17,11 +19,18 @@ function selectIcon(sport) {
   }
 }
 
+function typeResult(sport, gameId) {
+  if (sport === "계주") {
+    return <RunningResult gameId={gameId} />;
+  } else {
+    return <ElseResult gameId={gameId} />;
+  }
+}
+
 export default function ScheduleCard({ schedule }) {
   return (
-    <div className="flex justify-between items-center w-[500px]">
-      <input type="checkbox" value="done" className="w-5 h-5" />
-      <div className="font-bold text-[18px] flex items-center px-3 w-full">
+    <div className="flex justify-between gap-5 items-center">
+      <div className="font-bold text-[18px] flex gap-3 items-center px-3 w-full">
         {selectIcon(schedule[0])}
         {schedule[2]} vs {schedule[3]}
       </div>
@@ -29,6 +38,7 @@ export default function ScheduleCard({ schedule }) {
         <div>{schedule[4]}</div>
         <div>{schedule[1]}</div>
       </div>
+      <div>{typeResult(schedule[0], schedule[5])}</div>
     </div>
   );
 }
