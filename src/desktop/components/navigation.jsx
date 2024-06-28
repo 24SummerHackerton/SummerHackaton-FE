@@ -43,7 +43,7 @@ export default function Navigation() {
         onClick={() => navigate("/")}
       >
         <FaClipboardList className="text-[35px]" />
-        <span className="text-[20px]">개설 종목</span>
+        <span className="text-[20px]">종목 개설</span>
       </div>
       <div
         className="flex gap-3 justify-start items-center cursor-pointer hover:bg-gray-200 py-5 px-10"
