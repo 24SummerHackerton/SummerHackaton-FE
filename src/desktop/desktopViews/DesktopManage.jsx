@@ -203,7 +203,7 @@ export default function DesktopManage() {
 
   return (
     <div className="flex">
-      <div className="w-[500px] border-2">
+      <div className="p-4 border-r-2 sticky top-0 w-[500px]">
         <div className="text-3xl font-bold mb-4">종목 관리</div>
         <div className="flex flex-col gap-4">
           <PartCard
