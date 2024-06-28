@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-export default function PartCard() {
-  const navigate = useNavigate();
+export default function PartCard({ manageText, onClick }) {
   return (
     <div className="border-2 border-black rounded-md w-[400px] px-3 py-2">
       <div className="flex justify-between">
@@ -18,9 +17,9 @@ export default function PartCard() {
 
       <div
         className="cursor-pointer flex justify-center items-center px-4 py-1 rounded-full bg-black text-white hover:bg-gray-500"
-        onClick={() => navigate("/manage")}
+        onClick={onClick}
       >
-        관리
+        {manageText}
       </div>
     </div>
   );

@@ -25,11 +25,11 @@ export default function DesktopHome() {
       <div className="flex gap-5 justify-center ">
         <div className="flex flex-col gap-5 relative z-10 px-10 py-5">
           <div className="text-2xl font-bold">현재 개설된 종목</div>
-          <PartCard />
-          <PartCard />
-          <PartCard />
-          <PartCard />
-          <PartCard />
+          <PartCard manageText="관리"/>
+          <PartCard manageText="관리"/>
+          <PartCard manageText="관리"/>
+          <PartCard manageText="관리"/>
+          <PartCard manageText="관리"/>
         </div>
 
         <div className="flex flex-col gap-5 relative z-10 px-10 py-5">
