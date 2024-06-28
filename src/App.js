@@ -34,6 +34,7 @@ const App = () => {
         { path: "", element: <DesktopHome /> },
         { path: "referee", element: <DesktopReferee /> },
         { path: "schedule", element: <DesktopSchedule /> },
+
         { path: "create", element: <DesktopCreate /> },
         { path: "teams", element: <DesktopTeams /> },
       ],
