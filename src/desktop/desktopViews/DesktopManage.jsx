@@ -91,9 +91,7 @@ export default function DesktopManage() {
   const renderSelectedTeam = () => {
     if (selectedTeam === "") {
       return (
-        <div className="">
-          팀 정보를 보고 싶으면 팀 이름을 클릭하세요.
-        </div>
+        <div className="">팀 정보를 보고 싶으면 팀 이름을 클릭하세요.</div>
       );
     }
 
@@ -101,7 +99,9 @@ export default function DesktopManage() {
 
     return (
       <div className="team-details mt-4">
-        <div className="text-2xl font-bold">현재 표시된 팀은 {currentTeam} 입니다.</div>
+        <div className="text-2xl font-bold">
+          현재 표시된 팀은 {currentTeam} 입니다.
+        </div>
         <button
           onClick={handleSendLink}
           className="bg-pointRed text-white p-2 rounded mt-4"
@@ -203,7 +203,7 @@ export default function DesktopManage() {
 
   return (
     <div className="flex">
-      <div className="p-4 border-r-2 sticky top-0 w-[500px]">
+      <div className="w-[500px] border-2">
         <div className="text-3xl font-bold mb-4">종목 관리</div>
         <div className="flex flex-col gap-4">
           <PartCard
@@ -223,7 +223,12 @@ export default function DesktopManage() {
             onClick={() => setSelectedEvent("계주")}
           />
         </div>
-        <button onClick={() => setIsModalOpen(true)} className="bg-black text-white p-2 rounded mt-4">종목 추가</button>
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="bg-black text-white p-2 rounded mt-4"
+        >
+          종목 추가
+        </button>
       </div>
       <div className="w-[800px] p-4">
         {selectedEvent && (
@@ -237,7 +242,10 @@ export default function DesktopManage() {
       </div>
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="fixed inset-0 bg-black opacity-50" onClick={() => setIsModalOpen(false)}></div>
+          <div
+            className="fixed inset-0 bg-black opacity-50"
+            onClick={() => setIsModalOpen(false)}
+          ></div>
           <DesktopCreate onClose={() => setIsModalOpen(false)} />
         </div>
       )}
