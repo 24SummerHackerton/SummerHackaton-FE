@@ -7,6 +7,9 @@ export default {
         pointRed: "#ff3334",
         lightRed: "#fb7777",
       },
+      gridTemplateColumns: {
+        custom: "1fr 5fr 1fr",
+      },
     },
   },
   plugins: [],

@@ -19,13 +19,13 @@ function selectIcon(sport) {
   }
 }
 
-function typeResult(sport, gameId) {
-  if (sport === "계주") {
-    return <RunningResult gameId={gameId} />;
-  } else {
-    return <ElseResult gameId={gameId} />;
-  }
-}
+// function typeResult(sport, gameId) {
+//   if (sport === "계주") {
+//     return <RunningResult gameId={gameId} />;
+//   } else {
+//     return <ElseResult gameId={gameId} />;
+//   }
+// }
 
 export default function ScheduleCard({ schedule }) {
   return (
@@ -38,7 +38,6 @@ export default function ScheduleCard({ schedule }) {
         <div>{schedule[4]}</div>
         <div>{schedule[1]}</div>
       </div>
-      <div>{typeResult(schedule[0], schedule[5])}</div>
     </div>
   );
 }

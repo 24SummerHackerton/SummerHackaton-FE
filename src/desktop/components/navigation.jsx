@@ -31,13 +31,7 @@ export default function Navigation() {
         <GiWhistle className="text-[35px]" />
         <span className="text-[20px]">심판진 관리</span>
       </div>
-      <div
-        className="flex gap-3 justify-start items-center cursor-pointer hover:bg-gray-200 py-5 px-10"
-        onClick={() => navigate("/tournament")}
-      >
-        <TbTournament className="text-[35px]" />
-        <span className="text-[20px]">대진 관리</span>
-      </div>
+
       <div
         className="flex gap-3 justify-start items-center cursor-pointer hover:bg-gray-200 py-5 px-10"
         onClick={() => navigate("/manage")}
