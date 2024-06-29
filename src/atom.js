@@ -31,6 +31,7 @@ export const resultList = atom({
   default: [],
 });
 
+
 export const eventsState = atom({
   key: "eventsState",
   default: [

@@ -1,12 +1,16 @@
+
 import React from "react";
 import { useRecoilValue } from "recoil";
 import { eventsState } from "../../atom";
+
 
 export default function PartCard({ manageText, onClick, onDelete }) {
   const events = useRecoilValue(eventsState);
 
   // 종목명만 추출하여 중복 제거
+
   const uniqueEvents = Array.from(new Set(events.map((event) => event[4])));
+
 
   return (
     <div className="flex flex-col gap-4">
@@ -18,6 +22,7 @@ export default function PartCard({ manageText, onClick, onDelete }) {
           <div className="flex justify-between">
             <div className="">
               <div className="font-bold text-2xl">{eventName}</div>
+
             </div>
             <div className="flex self-start items-center gap-2 rounded-full shadow-md px-3">
               <div className="bg-green-300 rounded-full w-2 h-2" />

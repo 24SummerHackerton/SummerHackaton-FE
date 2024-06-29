@@ -6,6 +6,7 @@ import DesktopCreate from "./DesktopCreate";
 import { doc, getDoc } from "firebase/firestore";
 import { database } from "../../firebase";
 
+
 export default function DesktopManage() {
   const [events, setEvents] = useRecoilState(eventsState);
   const [selectedEvent, setSelectedEvent] = useState("");
@@ -40,6 +41,7 @@ export default function DesktopManage() {
 
       const groupedTeams = filteredData.reduce((acc, item) => {
         const teamName = item[5];
+
         if (!acc[teamName]) {
           acc[teamName] = [];
         }
@@ -48,6 +50,7 @@ export default function DesktopManage() {
           studentId: item[1],
           name: item[2],
           phone: item[3],
+
         });
         return acc;
       }, {});
@@ -56,6 +59,7 @@ export default function DesktopManage() {
       setSelectedTeam("");
     }
   }, [selectedEvent]);
+
 
   const handleTeamClick = (team) => {
     setSelectedTeam(team);
@@ -97,6 +101,7 @@ export default function DesktopManage() {
     setEvents((prevEvents) =>
       prevEvents.filter((event) => event[4] !== eventName)
     );
+
     if (selectedEvent === eventName) {
       setSelectedEvent("");
       setTeams({});
@@ -127,6 +132,7 @@ export default function DesktopManage() {
       [name]: value,
     }));
   };
+
 
   const renderTeamList = () => (
     <div className="team-list text-center flex flex-wrap">
@@ -159,6 +165,7 @@ export default function DesktopManage() {
         <div className="text-2xl font-bold">
           현재 표시된 팀은 {currentTeam} 입니다.
         </div>
+
 
         <table className="min-w-full bg-white mt-4 table-fixed text-sm">
           <thead>
@@ -295,6 +302,7 @@ export default function DesktopManage() {
     setEvents((prevEvents) => [
       ...prevEvents,
       ["학과명", 0, "이름", 0, "전화번호", newEvent.eventName, "팀명"],
+
     ]);
   };
 
@@ -303,6 +311,7 @@ export default function DesktopManage() {
       <div className="p-4 w-[500px] h-[100vh]">
         <div className="text-3xl font-bold mb-4 ">종목 관리</div>
         <div className="flex flex-col gap-4 h-[80%] overflow-y-scroll">
+
           <PartCard
             manageText="종목 상세보기"
             onClick={(eventName) => setSelectedEvent(eventName)}
@@ -341,6 +350,7 @@ export default function DesktopManage() {
               onClose={() => setIsModalOpen(false)}
               onSubmit={handleAddEvent}
             />
+
           </div>
         </div>
       )}
